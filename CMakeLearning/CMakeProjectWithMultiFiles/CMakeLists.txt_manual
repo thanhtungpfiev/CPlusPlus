@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.12)
+
+project(HelloWorld)
+
+add_executable(HelloWorld main.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/Shape/Shape.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/Shape/Triangle/Triangle.cpp)
+
+target_include_directories(HelloWorld PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/Shape ${CMAKE_CURRENT_SOURCE_DIR}/include/Shape/Triangle)
