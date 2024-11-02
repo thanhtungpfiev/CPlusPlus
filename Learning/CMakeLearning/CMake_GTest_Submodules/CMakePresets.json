@@ -2,7 +2,7 @@
     "version": 8,
     "configurePresets": [
         {
-            "name": "Visual Studio Community 2022 Release - amd64",
+            "name": "windows_msvs_2022",
             "displayName": "Visual Studio Community 2022 Release - amd64",
             "description": "Using compilers for Visual Studio 17 2022 (x64 architecture)",
             "generator": "Visual Studio 17 2022",
@@ -16,7 +16,7 @@
             }
         },
         {
-            "name": "GCC 13.1.0 x86_64-w64-mingw32",
+            "name": "windows_gcc",
             "displayName": "GCC 13.1.0 x86_64-w64-mingw32",
             "description": "Using compilers: C = C:\\Strawberry\\c\\bin\\gcc.exe, CXX = C:\\Strawberry\\c\\bin\\g++.exe",
             "binaryDir": "${sourceDir}/out/build/${presetName}",
@@ -26,32 +26,20 @@
                 "CMAKE_CXX_COMPILER": "C:/Strawberry/c/bin/g++.exe",
                 "CMAKE_BUILD_TYPE": "Debug"
             }
-        },
-        {
-            "name": "GCC 11.4.0 x86_64-linux-gnu",
-            "displayName": "GCC 11.4.0 x86_64-linux-gnu",
-            "description": "Using compilers: C = /usr/bin/gcc, CXX = /usr/bin/g++",
-            "binaryDir": "${sourceDir}/out/build/${presetName}",
-            "cacheVariables": {
-                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
-                "CMAKE_C_COMPILER": "/usr/bin/gcc",
-                "CMAKE_CXX_COMPILER": "/usr/bin/g++",
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
         }
     ],
     "buildPresets": [
         {
-            "name": "Visual Studio Community 2022 Release - amd64",
+            "name": "windows_msvs_2022",
             "description": "",
-            "displayName": "",
-            "configurePreset": "Visual Studio Community 2022 Release - amd64"
+            "displayName": "Visual Studio Community 2022 Release - amd64",
+            "configurePreset": "windows_msvs_2022"
         },
         {
-            "name": "GCC 13.1.0 x86_64-w64-mingw32",
+            "name": "windows_gcc",
             "description": "",
-            "displayName": "",
-            "configurePreset": "GCC 13.1.0 x86_64-w64-mingw32"
+            "displayName": "GCC 13.1.0 x86_64-w64-mingw32",
+            "configurePreset": "windows_gcc"
         }
     ]
 }

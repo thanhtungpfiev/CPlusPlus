@@ -2,9 +2,14 @@
 cmake_minimum_required(VERSION 3.14)
 project(gtestbox)
 set(CMAKE_CXX_STANDARD 14)
+if (COVERAGE)
+set(CMAKE_CXX_FLAGS "-g -O0 -Wall -fprofile-arcs -ftest-coverage")
+endif()
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(LIB_PERSON lib/person)
+include_directories(${LIB_PERSON})
 add_library(${PROJECT_NAME} STATIC
-    person.cpp
+    ${LIB_PERSON}/person.cpp
 )
 
 # hook and configure dependencies
