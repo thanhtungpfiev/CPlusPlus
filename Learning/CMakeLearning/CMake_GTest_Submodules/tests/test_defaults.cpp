@@ -13,6 +13,27 @@ namespace gtestbox {
                 EXPECT_STREQ(p.name.c_str(), "unknown");
                 EXPECT_EQ(p.age, 0);
             }
+
+            TEST(TestDefaults, BasicAssertions_1) {
+                gtestbox::person::Person p;
+                std::string msg = "Tung";
+                p.sayHello(msg);
+                EXPECT_EQ(p.age, 0);
+            }
+
+            TEST(TestDefaults, BasicAssertions_2) {
+                gtestbox::person::Person p;
+                std::string msg = "T";
+                p.sayHello(msg);
+                EXPECT_EQ(p.age, 0);
+            }
+
+            TEST(TestDefaults, BasicAssertions_3) {
+                gtestbox::person::Person p;
+                std::string msg = "Tung123";
+                p.sayHello(msg);
+                EXPECT_EQ(p.age, 0);
+            }
         }
     }
 }

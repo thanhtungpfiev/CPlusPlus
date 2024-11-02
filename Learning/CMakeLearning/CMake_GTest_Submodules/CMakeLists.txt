@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.14)
 project(gtestbox)
 set(CMAKE_CXX_STANDARD 14)
-if (COVERAGE)
+if (${COVERAGE})
 set(CMAKE_CXX_FLAGS "-g -O0 -Wall -fprofile-arcs -ftest-coverage")
 endif()
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

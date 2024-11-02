@@ -21,6 +21,8 @@ def clean_out_build_directory():
 
 def make_report_directory():
     make_directory(g_report_directory_path)
+    if g_coverage:
+        make_directory(g_html_directory_path)
 
 def configure():
     if g_run_environment == "windows_msvs_2022":
@@ -49,13 +51,17 @@ def configure():
     elif g_run_environment == "linux_gcc":
         cmake_command = [
             "cmake",
-            "-DCMAKE_C_COMPILER=/usr/bin/gcc",
-            "-DCMAKE_CXX_COMPILER=/usr/bin/g++",
+            "-DCMAKE_C_COMPILER=gcc",
+            "-DCMAKE_CXX_COMPILER=g++",
             "-DCMAKE_BUILD_TYPE=Debug",
             f"-S{root_directory_path}",
             f"-B{g_out_build_directory_path}"
 
         ]
+    if g_coverage:
+        cmake_command.extend([
+            "-DCOVERAGE=1"
+        ])
 
     run_command(cmake_command)
 
@@ -82,6 +88,19 @@ def run():
             print(f"Output has been written to {g_test_report_file_path}")
         except subprocess.CalledProcessError as e:
             print(f"An error occurred while running the executable. Check {g_test_report_file_path} for details.")
+    
+    if g_coverage:
+        gcovr_comamand = [
+            "gcovr",
+            "-r",
+            f"{root_directory_path}",
+            "--filter",
+            f"{os.path.join(root_directory_path, 'lib', 'person')}",
+            "--html-details",
+            f"{os.path.join(g_html_directory_path, 'coverage_report.html')}"
+        ]
+        
+        run_command(gcovr_comamand)
 
 
 def gen_ut_report():
@@ -90,19 +109,26 @@ def gen_ut_report():
 
     # Add arguments
     parser.add_argument("--run_environment", required=True, help="Environment to make test.")
+    parser.add_argument("--coverage", required=False, action="store_true", help="Need coverage.")
 
     # Parse arguments
     args = parser.parse_args()
 
     # Use arguments
-    global g_run_environment, g_out_directory_path, g_out_build_directory_path, g_report_directory_path, g_test_report_file_path
+    global g_run_environment, g_coverage, g_out_directory_path, g_out_build_directory_path, g_report_directory_path, g_test_report_file_path
     g_run_environment = args.run_environment
+    g_coverage = args.coverage
     g_out_directory_path = os.path.join(root_directory_path, "out")
     g_out_build_directory_path = os.path.join(g_out_directory_path, "build", g_run_environment)
     g_report_directory_path = os.path.join(g_out_build_directory_path, "report")
     g_test_report_file_path = os.path.join(g_report_directory_path, "test_report.txt")
+    
+    if g_coverage:
+        global g_html_directory_path
+        g_html_directory_path = os.path.join(g_report_directory_path, "coverage_report") 
 
     print(f"run_environment: {g_run_environment}")
+    print(f"g_coverage: {g_coverage}")
 
     clean_out_build_directory()
 
