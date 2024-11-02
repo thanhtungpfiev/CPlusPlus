@@ -14641,3 +14641,7 @@ CMakeLearning/Basic/Ex1/Gcc_Compiler/gcc-10.2-arm32-eabi/share/man/man1/arm-none
 CMakeLearning/Basic/Ex1/Gcc_Compiler/gcc-10.2-arm32-eabi/share/man/man7/fsf-funding.7
 CMakeLearning/Basic/Ex1/Gcc_Compiler/gcc-10.2-arm32-eabi/share/man/man7/gfdl.7
 CMakeLearning/Basic/Ex1/Gcc_Compiler/gcc-10.2-arm32-eabi/share/man/man7/gpl.7
+
+Learning/CMakeLearning/CMake_GTest_Submodules/build/
+
+Learning/CMakeLearning/CMake_GTest_Submodules/out/
