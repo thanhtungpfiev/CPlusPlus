@@ -19,6 +19,7 @@
             "name": "windows_gcc",
             "displayName": "GCC 13.1.0 x86_64-w64-mingw32",
             "description": "Using compilers: C = C:\\Strawberry\\c\\bin\\gcc.exe, CXX = C:\\Strawberry\\c\\bin\\g++.exe",
+            "generator": "MinGW Makefiles",
             "binaryDir": "${sourceDir}/out/build/${presetName}",
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",

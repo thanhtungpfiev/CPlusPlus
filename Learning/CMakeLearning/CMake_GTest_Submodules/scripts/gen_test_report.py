@@ -42,11 +42,13 @@ def configure():
     elif g_run_environment == "windows_gcc":
         cmake_command = [
             "cmake",
-            "-DCMAKE_C_COMPILER=gccc.exe",
+            "-DCMAKE_C_COMPILER=gcc.exe",
             "-DCMAKE_CXX_COMPILER=g++.exe",
             "-DCMAKE_BUILD_TYPE=Debug",
             f"-S{root_directory_path}",
-            f"-B{g_out_build_directory_path}"
+            f"-B{g_out_build_directory_path}",
+            "-G",
+            "MinGW Makefiles",
         ]
     elif g_run_environment == "linux_gcc":
         cmake_command = [
@@ -69,7 +71,7 @@ def build():
     cmake_command = [
         "cmake",
         "--build",
-        f"{g_out_build_directory_path}"
+        g_out_build_directory_path
     ]
 
     run_command(cmake_command)
@@ -78,7 +80,7 @@ def run():
     if g_run_environment == "windows_msvs_2022":
         executable_file_path = os.path.join(g_out_build_directory_path, "Debug", "test_defaults.exe")
     elif g_run_environment == "windows_gcc":
-        executable_file_path = os.path.join(g_out_build_directory_path, "Debug", "test_defaults.exe")
+        executable_file_path = os.path.join(g_out_build_directory_path, "test_defaults.exe")
     elif g_run_environment == "linux_gcc":
         executable_file_path = os.path.join(g_out_build_directory_path, "test_defaults")
 
@@ -93,11 +95,11 @@ def run():
         gcovr_comamand = [
             "gcovr",
             "-r",
-            f"{root_directory_path}",
+            root_directory_path,
             "--filter",
-            f"{os.path.join(root_directory_path, 'lib', 'person')}",
+            os.path.join(root_directory_path, 'lib', 'person').replace('\\', '/'),
             "--html-details",
-            f"{os.path.join(g_html_directory_path, 'coverage_report.html')}"
+            os.path.join(g_html_directory_path, 'coverage_report.html').replace('\\', '/')
         ]
         
         run_command(gcovr_comamand)
