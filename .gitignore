@@ -4,3 +4,5 @@ Learning/CMakeLearning/CMake_GTest_FetchContent/build/
 Learning/CMakeLearning/CMake_GTest_Submodules/out/
 
 Learning/CMakeLearning/CMake_GTest_Submodules/scripts/__pycache__/
+
+Learning/CMakeLearning/CMake_GTest_Conan/build/

@@ -1,0 +1,12 @@
+# GTest include code would
+# go somewhere in here
+find_package(GTest REQUIRED)
+
+add_executable(multiply_test multiply_test.cpp)
+
+target_link_libraries(multiply_test
+ PRIVATE
+  GTest::GTest
+  multiply)
+
+add_test(multiply_gtests multiply_test)
