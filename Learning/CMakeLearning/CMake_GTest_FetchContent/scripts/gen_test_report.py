@@ -82,7 +82,7 @@ def run():
     elif g_run_environment == "windows_gcc":
         executable_file_path = os.path.join(g_out_build_directory_path, "tests", "multiply_test.exe")
     elif g_run_environment == "linux_gcc":
-        executable_file_path = os.path.join(g_out_build_directory_path, "test_defaults")
+        executable_file_path = os.path.join(g_out_build_directory_path, "tests", "multiply_test")
 
     with open(g_test_report_file_path, "w") as log_file:
         try:
