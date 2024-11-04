@@ -18,6 +18,7 @@ def run_command(command):
 
 def clean_out_build_directory():
     remove_directory(g_out_build_directory_path)
+    remove_file("CMakeUserPresets.json")
 
 def make_report_directory():
     make_directory(g_report_directory_path)
@@ -33,21 +34,41 @@ def configure():
     ]
     run_command(conan_command)
     
-    conan_command = [
-        "conan",
-        "install",
-        ".",
-        f"--output-folder={g_out_build_directory_path}",
-        "--build=missing",
-        "--settings=build_type=Debug"
-    ]
-    run_command(conan_command)
+    if g_run_environment == "windows_msvs_2022":
+        conan_command = [
+            "conan",
+            "install",
+            ".",
+            f"--output-folder={g_out_build_directory_path}",
+            "--build=missing",
+            "--settings=build_type=Debug"
+        ]
+        run_command(conan_command)
     
-    cmake_command = [
-        "cmake",
-        "--preset",
-        "conan-default"
-    ]
+        cmake_command = [
+            "cmake",
+            "--preset",
+            "conan-default"
+        ]
+    elif g_run_environment == "windows_gcc":
+        conan_command = [
+            "conan",
+            "install",
+            ".",
+            f"--output-folder={g_out_build_directory_path}",
+            "--build=missing",
+            "--settings=build_type=Debug",
+            "--settings=compiler=gcc",
+            "--settings=compiler.version=13",
+            "--settings=compiler.libcxx=libstdc++11"
+        ]
+        run_command(conan_command)
+        
+        cmake_command = [
+            "cmake",
+            "--preset",
+            "conan-debug"
+        ]
     
     if g_coverage:
         cmake_command.extend([
@@ -69,7 +90,7 @@ def run():
     if g_run_environment == "windows_msvs_2022":
         executable_file_path = os.path.join(g_out_build_directory_path, "tests", "Debug", "multiply_test.exe")
     elif g_run_environment == "windows_gcc":
-        executable_file_path = os.path.join(g_out_build_directory_path, "test_defaults.exe")
+        executable_file_path = os.path.join(g_out_build_directory_path, "tests", "multiply_test.exe")
     elif g_run_environment == "linux_gcc":
         executable_file_path = os.path.join(g_out_build_directory_path, "test_defaults")
 
@@ -86,7 +107,7 @@ def run():
             "-r",
             root_directory_path,
             "--filter",
-            os.path.join(root_directory_path, 'lib', 'person').replace('\\', '/'),
+            os.path.join(root_directory_path, 'src', 'multiply').replace('\\', '/'),
             "--html-details",
             os.path.join(g_html_directory_path, 'coverage_report.html').replace('\\', '/')
         ]

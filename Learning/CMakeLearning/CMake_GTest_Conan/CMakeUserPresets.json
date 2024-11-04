@@ -4,6 +4,6 @@
         "conan": {}
     },
     "include": [
-        "out\\build\\windows_msvs_2022\\CMakePresets.json"
+        "out\\build\\windows_gcc\\CMakePresets.json"
     ]
 }

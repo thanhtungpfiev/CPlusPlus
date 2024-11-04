@@ -12,3 +12,5 @@ Learning/CMakeLearning/CMake_GTest_FetchContent/out/
 Learning/CMakeLearning/CMake_GTest_FetchContent/scripts/__pycache__/
 
 Learning/CMakeLearning/CMake_GTest_Conan/out/
+
+Learning/CMakeLearning/CMake_GTest_Conan/scripts/__pycache__/
