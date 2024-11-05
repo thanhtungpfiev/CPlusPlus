@@ -17,11 +17,12 @@ RUN_ENVIRONMENT_LINUX_GCC = "linux_gcc_user"
 
 def run_command(command, output_file=None):
     try:
+        env = os.environ.copy()
         if output_file:
             with open(output_file, 'w') as file:
-                result = subprocess.run(command, check=True, stdout=file, stderr=subprocess.STDOUT, text=True, shell=True)
+                result = subprocess.run(command, check=True, stdout=file, stderr=subprocess.STDOUT, text=True, env=env)
         else:
-            result = subprocess.run(command, check=True, capture_output=True, text=True, shell=True)
+            result = subprocess.run(command, check=True, capture_output=True, text=True, env=env)
             print(result.stdout)
         print(f"{Fore.GREEN}{' '.join(command)} ran successfully.{Style.RESET_ALL}")
     except subprocess.CalledProcessError as e:

@@ -44,38 +44,5 @@
                 "COVERAGE": "1"
             }
         }
-    ],
-    "buildPresets": [
-        {
-            "name": "windows_msvs_2022",
-            "hidden": true,
-            "description": "",
-            "displayName": "Visual Studio Community 2022 Release - amd64",
-            "configurePreset": "windows_msvs_2022"
-        },
-        {
-            "name": "windows_gcc",
-            "hidden": true,
-            "description": "",
-            "displayName": "GCC MinGW32",
-            "configurePreset": "windows_gcc"
-        },
-        {
-            "name": "linux_gcc",
-            "hidden": true,
-            "description": "",
-            "displayName": "GCC",
-            "configurePreset": "linux_gcc"
-        }
-    ],
-    "testPresets": [
-        {
-            "name": "windows_msvs_2022",
-            "hidden": true,
-            "description": "Run tests for Visual Studio Community 2022 Release - amd64",
-            "displayName": "Run Tests",
-            "configurePreset": "windows_msvs_2022",
-            "configuration": "Debug"
-        }
     ]
 }

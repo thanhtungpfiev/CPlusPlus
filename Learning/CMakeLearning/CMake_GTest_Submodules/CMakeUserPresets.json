@@ -21,6 +21,21 @@
             "cacheVariables": {
                 "COVERAGE": "1"
             }
+        },
+        {
+            "name": "linux_gcc_user",
+            "inherits": "linux_gcc",
+            "displayName": "GCC Linux (User)",
+            "description": "User-specific configuration for GCC on Linux"
+        },
+        {
+            "name": "linux_gcc_coverage_user",
+            "inherits": "linux_gcc_user",
+            "displayName": "GCC Linux with Coverage (User)",
+            "description": "User-specific configuration for GCC on Linux with coverage",
+            "cacheVariables": {
+                "COVERAGE": "1"
+            }
         }
     ],
     "buildPresets": [
@@ -41,6 +56,18 @@
             "description": "",
             "displayName": "GCC Windows with Coverage (User)",
             "configurePreset": "windows_gcc_coverage_user"
+        },
+        {
+            "name": "linux_gcc_user",
+            "description": "",
+            "displayName": "GCC Linux (User)",
+            "configurePreset": "linux_gcc_user"
+        },
+        {
+            "name": "linux_gcc_coverage_user",
+            "description": "",
+            "displayName": "GCC Linux with Coverage (User)",
+            "configurePreset": "linux_gcc_coverage_user"
         }
     ],
     "testPresets": [
@@ -63,6 +90,20 @@
             "description": "Run tests for GCC Windows with Coverage (User)",
             "displayName": "Run Tests (GCC Windows with Coverage User)",
             "configurePreset": "windows_gcc_coverage_user",
+            "configuration": "Debug"
+        },
+        {
+            "name": "linux_gcc_user",
+            "description": "Run tests for GCC Linux (User)",
+            "displayName": "Run Tests (GCC Linux User)",
+            "configurePreset": "linux_gcc_user",
+            "configuration": "Debug"
+        },
+        {
+            "name": "linux_gcc_coverage_user",
+            "description": "Run tests for GCC Linux with Coverage (User)",
+            "displayName": "Run Tests (GCC Linux with Coverage User)",
+            "configurePreset": "linux_gcc_coverage_user",
             "configuration": "Debug"
         }
     ]
