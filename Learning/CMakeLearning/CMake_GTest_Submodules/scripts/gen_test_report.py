@@ -100,12 +100,7 @@ def run():
     elif g_run_environment == RUN_ENVIRONMENT_LINUX_GCC:
         executable_file_path = os.path.join(g_out_build_directory_path, "test_defaults")
 
-    with open(g_test_report_file_path, "w") as log_file:
-        try:
-            subprocess.run([executable_file_path], check=True, stdout=log_file, stderr=log_file)
-            print(f"Output has been written to {g_test_report_file_path}")
-        except subprocess.CalledProcessError as e:
-            print(f"An error occurred while running the executable. Check {g_test_report_file_path} for details.")
+    run_command([executable_file_path], output_file=g_test_report_file_path)
     
     if g_coverage:
         gcovr_comamand = [

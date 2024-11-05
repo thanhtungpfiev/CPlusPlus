@@ -96,7 +96,7 @@ def gen_ut_report():
     # Use arguments
     global g_run_environment, g_coverage, g_out_directory_path, g_out_build_directory_path, g_report_directory_path, g_test_report_file_path
     g_run_environment = args.run_environment
-    g_coverage = args.coverage
+    g_coverage = "coverage" in g_run_environment
     g_out_directory_path = os.path.join(root_directory_path, "out")
     g_out_build_directory_path = os.path.join(g_out_directory_path, "build", g_run_environment)
     g_report_directory_path = os.path.join(g_out_build_directory_path, "report")
