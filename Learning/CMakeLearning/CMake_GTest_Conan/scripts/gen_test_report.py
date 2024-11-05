@@ -2,19 +2,31 @@ import argparse
 import os
 import subprocess
 from file_util import remove_file, remove_directory, make_directory
+from colorama import init, Fore, Style
 
 current_file_path = os.path.abspath(__file__)
 current_directory_path = os.path.dirname(current_file_path)
 root_directory_path = os.path.abspath(os.path.join(current_directory_path, ".."))
 
-def run_command(command):
+# Initialize colorama
+init()
+
+def run_command(command, output_file=None):
     try:
-        result = subprocess.run(command, check=True, capture_output=False, text=True)
-        print(f"{' '.join(command)} ran successfully.")
-        print(result.stdout)
+        if output_file:
+            with open(output_file, 'w') as file:
+                result = subprocess.run(command, check=True, stdout=file, stderr=subprocess.STDOUT, text=True, shell=True)
+        else:
+            result = subprocess.run(command, check=True, capture_output=True, text=True, shell=True)
+            print(result.stdout)
+        print(f"{Fore.GREEN}{' '.join(command)} ran successfully.{Style.RESET_ALL}")
     except subprocess.CalledProcessError as e:
-        print(f"{' '.join(command)} ran failed.")
-        print(e.stderr)
+        print(f"{Fore.RED}{' '.join(command)} ran failed.{Style.RESET_ALL}")
+        if output_file:
+            with open(output_file, 'a') as file:
+                file.write(e.stderr)
+        else:
+            print(e.stderr)
 
 def clean_out_build_directory():
     remove_directory(g_out_build_directory_path)
@@ -28,58 +40,22 @@ def make_report_directory():
 def configure():
     conan_command = [
         "conan",
-        "profile",
-        "detect",
-        "--force"
+        "install",
+        ".",
+        f"--profile=./profiles/{g_run_environment}",
+        f"--output-folder={g_out_build_directory_path}",
+        "--build=missing",
+        
     ]
     run_command(conan_command)
     
     if g_run_environment == "windows_msvs_2022":
-        conan_command = [
-            "conan",
-            "install",
-            ".",
-            f"--output-folder={g_out_build_directory_path}",
-            "--build=missing",
-            "--settings=build_type=Debug"
-        ]
-        run_command(conan_command)
-    
         cmake_command = [
             "cmake",
             "--preset",
             "conan-default"
         ]
-    elif g_run_environment == "windows_gcc":
-        conan_command = [
-            "conan",
-            "install",
-            ".",
-            f"--output-folder={g_out_build_directory_path}",
-            "--build=missing",
-            "--settings=build_type=Debug",
-            "--settings=compiler=gcc",
-            "--settings=compiler.version=13",
-            "--settings=compiler.libcxx=libstdc++11"
-        ]
-        run_command(conan_command)
-        
-        cmake_command = [
-            "cmake",
-            "--preset",
-            "conan-debug"
-        ]
-    elif g_run_environment == "linux_gcc":
-        conan_command = [
-            "conan",
-            "install",
-            ".",
-            f"--output-folder={g_out_build_directory_path}",
-            "--build=missing",
-            "--settings=build_type=Debug"
-        ]
-        run_command(conan_command)
-    
+    else:
         cmake_command = [
             "cmake",
             "--preset",
