@@ -3,6 +3,7 @@
     "configurePresets": [
         {
             "name": "windows_msvs_2022",
+            "hidden": true,
             "displayName": "Visual Studio Community 2022 Release - amd64",
             "description": "Using compilers for Visual Studio 17 2022 (x64 architecture)",
             "generator": "Visual Studio 17 2022",
@@ -17,30 +18,64 @@
         },
         {
             "name": "windows_gcc",
-            "displayName": "GCC 13.1.0 x86_64-w64-mingw32",
-            "description": "Using compilers: C = C:\\Strawberry\\c\\bin\\gcc.exe, CXX = C:\\Strawberry\\c\\bin\\g++.exe",
+            "hidden": true,
+            "displayName": "GCC MinGW32",
+            "description": "Using compilers: gcc.exe, CXX = g++.exe",
             "generator": "MinGW Makefiles",
             "binaryDir": "${sourceDir}/out/build/${presetName}",
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
-                "CMAKE_C_COMPILER": "C:/Strawberry/c/bin/gcc.exe",
-                "CMAKE_CXX_COMPILER": "C:/Strawberry/c/bin/g++.exe",
+                "CMAKE_C_COMPILER": "gcc.exe",
+                "CMAKE_CXX_COMPILER": "g++.exe",
                 "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "linux_gcc",
+            "hidden": true,
+            "displayName": "GCC",
+            "description": "Using compilers: C = gcc, CXX = g++",
+            "binaryDir": "${sourceDir}/out/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
+                "CMAKE_C_COMPILER": "gcc",
+                "CMAKE_CXX_COMPILER": "g++",
+                "CMAKE_BUILD_TYPE": "Debug",
+                "COVERAGE": "1"
             }
         }
     ],
     "buildPresets": [
         {
             "name": "windows_msvs_2022",
+            "hidden": true,
             "description": "",
             "displayName": "Visual Studio Community 2022 Release - amd64",
             "configurePreset": "windows_msvs_2022"
         },
         {
             "name": "windows_gcc",
+            "hidden": true,
             "description": "",
-            "displayName": "GCC 13.1.0 x86_64-w64-mingw32",
+            "displayName": "GCC MinGW32",
             "configurePreset": "windows_gcc"
+        },
+        {
+            "name": "linux_gcc",
+            "hidden": true,
+            "description": "",
+            "displayName": "GCC",
+            "configurePreset": "linux_gcc"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "windows_msvs_2022",
+            "hidden": true,
+            "description": "Run tests for Visual Studio Community 2022 Release - amd64",
+            "displayName": "Run Tests",
+            "configurePreset": "windows_msvs_2022",
+            "configuration": "Debug"
         }
     ]
 }

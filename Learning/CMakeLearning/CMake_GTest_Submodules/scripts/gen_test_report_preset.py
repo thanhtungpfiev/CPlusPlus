@@ -41,45 +41,11 @@ def make_report_directory():
         make_directory(g_html_directory_path)
 
 def configure():
-    if g_run_environment == RUN_ENVIRONMENT_WINDOWS_MSVS_2022:
-        cmake_command = [
-            "cmake",
-            "-DCMAKE_C_COMPILER=cl.exe",
-            "-DCMAKE_CXX_COMPILER=cl.exe",
-            f"-S{root_directory_path}",
-            f"-B{g_out_build_directory_path}",
-            "-G",
-            "Visual Studio 17 2022",
-            "-T",
-            "host=x64",
-            "-A",
-            "x64"
-        ]
-    elif g_run_environment == RUN_ENVIRONMENT_WINDOWS_GCC:
-        cmake_command = [
-            "cmake",
-            "-DCMAKE_C_COMPILER=gcc.exe",
-            "-DCMAKE_CXX_COMPILER=g++.exe",
-            "-DCMAKE_BUILD_TYPE=Debug",
-            f"-S{root_directory_path}",
-            f"-B{g_out_build_directory_path}",
-            "-G",
-            "MinGW Makefiles",
-        ]
-    elif g_run_environment == RUN_ENVIRONMENT_LINUX_GCC:
-        cmake_command = [
-            "cmake",
-            "-DCMAKE_C_COMPILER=gcc",
-            "-DCMAKE_CXX_COMPILER=g++",
-            "-DCMAKE_BUILD_TYPE=Debug",
-            f"-S{root_directory_path}",
-            f"-B{g_out_build_directory_path}"
-
-        ]
-    if g_coverage:
-        cmake_command.extend([
-            "-DCOVERAGE=1"
-        ])
+    cmake_command = [
+        "cmake",
+        "--preset",
+        g_run_environment
+    ]
 
     run_command(cmake_command)
 
@@ -87,26 +53,21 @@ def build():
     cmake_command = [
         "cmake",
         "--build",
-        g_out_build_directory_path
+        "--preset",
+        g_run_environment
     ]
 
     run_command(cmake_command)
 
 def run():
-    if g_run_environment == RUN_ENVIRONMENT_WINDOWS_MSVS_2022:
-        executable_file_path = os.path.join(g_out_build_directory_path, "Debug", "test_defaults.exe")
-    elif g_run_environment == RUN_ENVIRONMENT_WINDOWS_GCC:
-        executable_file_path = os.path.join(g_out_build_directory_path, "test_defaults.exe")
-    elif g_run_environment == RUN_ENVIRONMENT_LINUX_GCC:
-        executable_file_path = os.path.join(g_out_build_directory_path, "test_defaults")
-
-    with open(g_test_report_file_path, "w") as log_file:
-        try:
-            subprocess.run([executable_file_path], check=True, stdout=log_file, stderr=log_file)
-            print(f"Output has been written to {g_test_report_file_path}")
-        except subprocess.CalledProcessError as e:
-            print(f"An error occurred while running the executable. Check {g_test_report_file_path} for details.")
-    
+    ctest_command = [
+        "ctest",
+        "--preset",
+        g_run_environment,
+        "--output-on-failure"
+    ]
+    run_command(ctest_command, output_file=g_test_report_file_path)
+        
     if g_coverage:
         gcovr_comamand = [
             "gcovr",
