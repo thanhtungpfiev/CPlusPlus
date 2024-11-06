@@ -11,13 +11,18 @@ root_directory_path = os.path.abspath(os.path.join(current_directory_path, "..")
 # Initialize colorama
 init()
 
+RUN_ENVIRONMENT_WINDOWS_MSVS_2022 = "windows_msvs_2022_user"
+RUN_ENVIRONMENT_WINDOWS_GCC = "windows_gcc_user"
+RUN_ENVIRONMENT_LINUX_GCC = "linux_gcc_user"
+
 def run_command(command, output_file=None):
     try:
+        env = os.environ.copy()
         if output_file:
             with open(output_file, 'w') as file:
-                result = subprocess.run(command, check=True, stdout=file, stderr=subprocess.STDOUT, text=True, shell=True)
+                result = subprocess.run(command, check=True, stdout=file, stderr=subprocess.STDOUT, text=True, env=env)
         else:
-            result = subprocess.run(command, check=True, capture_output=True, text=True, shell=True)
+            result = subprocess.run(command, check=True, capture_output=True, text=True, env=env)
             print(result.stdout)
         print(f"{Fore.GREEN}{' '.join(command)} ran successfully.{Style.RESET_ALL}")
     except subprocess.CalledProcessError as e:
@@ -29,8 +34,7 @@ def run_command(command, output_file=None):
             print(e.stderr)
 
 def clean_out_build_directory():
-    remove_directory(g_out_build_directory_path)
-    remove_file("CMakeUserPresets.json")
+    remove_directory(g_out_directory_path)
 
 def make_report_directory():
     make_directory(g_report_directory_path)
@@ -49,23 +53,11 @@ def configure():
     ]
     run_command(conan_command)
     
-    if g_run_environment == "windows_msvs_2022":
-        cmake_command = [
-            "cmake",
-            "--preset",
-            "conan-default"
-        ]
-    else:
-        cmake_command = [
-            "cmake",
-            "--preset",
-            "conan-debug"
-        ]
-    
-    if g_coverage:
-        cmake_command.extend([
-            "-DCOVERAGE=1"
-        ])
+    cmake_command = [
+        "cmake",
+        "--preset",
+        "conan-default" if g_run_environment == RUN_ENVIRONMENT_WINDOWS_MSVS_2022 else "conan-debug"
+    ]
 
     run_command(cmake_command)
 
@@ -73,26 +65,21 @@ def build():
     cmake_command = [
         "cmake",
         "--build",
-        g_out_build_directory_path
+        "--preset",
+        g_run_environment
     ]
 
     run_command(cmake_command)
 
 def run():
-    if g_run_environment == "windows_msvs_2022":
-        executable_file_path = os.path.join(g_out_build_directory_path, "tests", "Debug", "multiply_test.exe")
-    elif g_run_environment == "windows_gcc":
-        executable_file_path = os.path.join(g_out_build_directory_path, "tests", "multiply_test.exe")
-    elif g_run_environment == "linux_gcc":
-        executable_file_path = os.path.join(g_out_build_directory_path, "tests", "multiply_test")
-
-    with open(g_test_report_file_path, "w") as log_file:
-        try:
-            subprocess.run([executable_file_path], check=True, stdout=log_file, stderr=log_file)
-            print(f"Output has been written to {g_test_report_file_path}")
-        except subprocess.CalledProcessError as e:
-            print(f"An error occurred while running the executable. Check {g_test_report_file_path} for details.")
-    
+    ctest_command = [
+        "ctest",
+        "--preset",
+        g_run_environment,
+        "--output-on-failure"
+    ]
+    run_command(ctest_command, output_file=g_test_report_file_path)
+        
     if g_coverage:
         gcovr_comamand = [
             "gcovr",
@@ -121,7 +108,7 @@ def gen_ut_report():
     # Use arguments
     global g_run_environment, g_coverage, g_out_directory_path, g_out_build_directory_path, g_report_directory_path, g_test_report_file_path
     g_run_environment = args.run_environment
-    g_coverage = args.coverage
+    g_coverage = "coverage" in g_run_environment
     g_out_directory_path = os.path.join(root_directory_path, "out")
     g_out_build_directory_path = os.path.join(g_out_directory_path, "build", g_run_environment)
     g_report_directory_path = os.path.join(g_out_build_directory_path, "report")
@@ -133,8 +120,6 @@ def gen_ut_report():
 
     print(f"run_environment: {g_run_environment}")
     print(f"g_coverage: {g_coverage}")
-    
-    os.chdir(root_directory_path)
 
     clean_out_build_directory()
 
