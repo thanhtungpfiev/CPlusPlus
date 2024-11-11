@@ -4,11 +4,17 @@ project(HelloApp
         DESCRIPTION "The leading Hello World App"
         LANGUAGES CXX)
 
+#Library
+SET(OPERATIONS_LIB "operations")
+add_library(${OPERATIONS_LIB} STATIC src/operations.cpp)
+target_compile_features(${OPERATIONS_LIB} PUBLIC cxx_std_20)
+target_include_directories(${OPERATIONS_LIB} PUBLIC  ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
 # Target
 add_executable(${PROJECT_NAME} main.cpp
                                 src/dog.cpp
-                                logger/src/log.cpp
-                                src/operations.cpp)
+                                logger/src/log.cpp)
 
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/logger/include)
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/logger/include)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${OPERATIONS_LIB})
