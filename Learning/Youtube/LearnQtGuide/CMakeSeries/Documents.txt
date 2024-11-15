@@ -1,1 +1,2 @@
-CMake-Episode 001 :  Basic concepts, tools and goals | CMake Starts Here
+https://www.youtube.com/playlist?list=PLQMs5svASiXOraccrnEbkd_kVHbAdC2mp
+https://github.com/rutura/CMakeSeries
